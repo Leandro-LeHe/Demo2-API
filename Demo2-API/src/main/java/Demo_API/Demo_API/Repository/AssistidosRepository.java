@@ -10,5 +10,7 @@ import java.util.List;
 //indica que vamos trabalhar com a classe AssistidosEntity e a chave primaria é um long
 // JpaRepository tem todos on metodos para trabalhar com banco de dados
 public interface AssistidosRepository extends JpaRepository<AssistidosEntity,Long> {
-    List<AssistidosEntity> id(Long id);
+   // List<AssistidosEntity> BuscarId(Long id);
+
+    Long id(Long id);
 }

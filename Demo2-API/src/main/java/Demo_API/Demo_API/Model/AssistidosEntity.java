@@ -13,8 +13,9 @@ public class AssistidosEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long    id;
-    String nome;
-    String email;
+    
+    private String nome;
+    private String email;
 
     public AssistidosEntity(String nome, String email){
         this.nome = nome;
