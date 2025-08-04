@@ -1,6 +1,7 @@
 package Demo_API.Demo_API.Service;
 
 
+import Demo_API.Demo_API.DTO.DtoResponse;
 import Demo_API.Demo_API.Model.AssistidosEntity;
 import Demo_API.Demo_API.Repository.AssistidosRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Service
 public class AssistidosService {
+
     private final AssistidosRepository assistidosRepository;
 
     public AssistidosService(AssistidosRepository assistidosRepository) {
@@ -21,7 +23,6 @@ public class AssistidosService {
         return assistidosRepository.findAll();
     }
 
-    // Optional: pode retornar ou não uma lista
     public AssistidosEntity buscarOuFalharService(Long id) {
         return assistidosRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cadastro não encontrado"));
 
@@ -30,40 +31,34 @@ public class AssistidosService {
     public AssistidosEntity salvarService(AssistidosEntity assistido) {
         return assistidosRepository.save(assistido);
     }
+
     public void deletarService(Long id) {
         assistidosRepository.deleteById(id);
     }
 
-    public AssistidosEntity atualizarAssistido(Long id, AssistidosEntity dadosNovos) {
-        try {
-            AssistidosEntity existente = buscarOuFalharService(id);
 
-            // Atualiza os campos (exemplo, ajuste para seus campos reais)
-            existente.setNome(dadosNovos.getNome());
-            existente.setEmail(dadosNovos.getEmail());
-            return assistidosRepository.save(existente);
-        }catch (Exception e) {
-            System.out.println("Erro ao atualizar assistido");
-            throw new EntityNotFoundException("Erro ao atualizar assistido");
-        }
+    public AssistidosEntity atualizarService(Long id, AssistidosEntity dadosAtualizados) {
+        // Busca o registro existente, ou lança exceção se não encontrar
+        AssistidosEntity existente = buscarOuFalharService(id);
+
+        // Atualiza os campos (exemplo: nome, cpf, etc. — você pode ajustar conforme sua entidade)
+        //Lombok dando erro
+        existente.setNome(dadosAtualizados.getNome());
+        existente.setEmail(dadosAtualizados.getEmail());
+        existente.setEndereco(dadosAtualizados.getEndereco());
+        // adicione outros campos conforme a sua entidade
+
+        // Salva e retorna o objeto atualizado
+        return assistidosRepository.save(existente);
     }
-
-
-/*
-
-    // Atualizar um usuário existente
-    @PutMapping("/{id}")
-    public Usuario atualizar(@PathVariable Long id, @RequestBody Usuario usuarioAtualizado) {
-        return usuarioRepository.findById(id)
-                .map(usuario -> {
-                    usuario.setNome(usuarioAtualizado.getNome());
-                    usuario.setEmail(usuarioAtualizado.getEmail());
-                    return usuarioRepository.save(usuario);
-                })
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com id: " + id));
+    /*
+     //DTO para Entity
+     public static DtoResponse paraEntity (AssistidosEntity entity) {
+        return new DtoResponse(
+                entity.getNome(),
+                entity.getEmail(),
+                entity.getEndereco()
+        );
     }
-*/
-
-
+    */
 }
-
