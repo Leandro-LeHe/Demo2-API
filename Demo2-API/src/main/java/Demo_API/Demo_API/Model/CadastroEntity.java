@@ -5,41 +5,34 @@ package Demo_API.Demo_API.Model;
 
 import jakarta.persistence.*;
 
+
 @Entity //indica que é uma entidade
 @Table(name="Tabela-Assistidos")  // nome da tabela
 
-public class AssistidosEntity {
-
+public class CadastroEntity {
+    //TODO:  @JsonIgnore  @JsonIgnoreProperties(ignoreUnknown = true) por que não usar?
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long    id;
-
+    private Long id;
     private String nome;
-
     private String email;
-
     private String endereco;
 
 
-
-    public AssistidosEntity(String nome, String email,String endereco){
+    public CadastroEntity(Long id, String nome, String email, String endereco, String senha) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.endereco = endereco;
     }
+
     //Construtor vazio
-    public AssistidosEntity() {
-
-    }
-
-    public String getEmail() {
-        return email;
-    }
+    public CadastroEntity() {}
+    public Long getId() {return id;}
+    public String getEmail() {return email;}
     public void setEmail(String email) {
         this.email = email;
     }
-
     public String getNome() {
         return nome;
     }
@@ -52,4 +45,6 @@ public class AssistidosEntity {
     public void setEndereco(String endereco) {
         this.endereco = endereco;
     }
+
+
 }
