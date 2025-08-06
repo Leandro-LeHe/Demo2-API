@@ -1,7 +1,11 @@
 package Demo_API.Demo_API.Controller;
 
+import Demo_API.Demo_API.DTO.DtoCadastro;
+import Demo_API.Demo_API.DTO.Mapper.CadastroMapper;
+import Demo_API.Demo_API.DTO.UsuarioResponseDto;
 import Demo_API.Demo_API.Model.CadastroEntity;
 import Demo_API.Demo_API.Service.CadastroService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,25 +24,41 @@ public class CadastroController {
         this.cadastroService = cadastroService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<CadastroEntity>> listarCadastros() {
-        System.out.println("Olá, Leandro!");
-        List<CadastroEntity> assistidos = cadastroService.listarService();
-        return ResponseEntity.status(HttpStatus.OK).body(assistidos);
-    }
 
+    @GetMapping
+    public ResponseEntity<List<UsuarioResponseDto>> listarCadastros() {
+        List<CadastroEntity> assistidos = cadastroService.listarService();
+        return ResponseEntity.status(HttpStatus.OK).body(CadastroMapper.toListDto(assistidos));
+    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CadastroEntity> buscarPorID(@PathVariable Long id) {
-        CadastroEntity assistidosEntity = cadastroService.buscarOuFalharService(id);
-        return ResponseEntity.status(HttpStatus.OK).body(assistidosEntity);
+    public ResponseEntity<UsuarioResponseDto> buscarPorID(@PathVariable Long id) {
+        CadastroEntity user = cadastroService.buscarOuFalharService(id);
+        return ResponseEntity.ok(CadastroMapper.toDto(user));
     }
+
+
+    /*
+    @GetMapping("/{id}")
+    public ResponseEntity<CadastroEntity> buscarPorID(@PathVariable Long id) {
+        CadastroEntity user = cadastroService.buscarOuFalharService(id);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+    */
+
+//
+//    @PostMapping
+//    //  Conversão (biblioteca Jackson ObjectMapper)
+//    public ResponseEntity<UsuarioResponseDto> salvarCadastro(@RequestBody DtoCadastro dtocadastro) {
+//        CadastroEntity user = cadastroService.salvarService(CadastroMapper.toUsuario(dtocadastro));
+//        return ResponseEntity.status(HttpStatus.CREATED).body(CadastroMapper.toDto(user));
+//    }
+
 
 
     @PostMapping
         //  Conversão (biblioteca Jackson ObjectMapper)
-    public ResponseEntity<CadastroEntity> salvarCadastro(@RequestBody CadastroEntity assistidos) {
-        System.out.println("Olá, Leandro!");
+    public ResponseEntity<CadastroEntity> salvarCadastro(@Valid @RequestBody CadastroEntity assistidos) {
         CadastroEntity user = cadastroService.salvarService(assistidos);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }

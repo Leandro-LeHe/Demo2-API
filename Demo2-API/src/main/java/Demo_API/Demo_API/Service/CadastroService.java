@@ -23,12 +23,12 @@ public class CadastroService {
     }
 
     public CadastroEntity buscarOuFalharService(Long id) {
+
         return cadastroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cadastro não encontrado"));
 
     }
 
     public CadastroEntity salvarService(CadastroEntity x) {
-        System.out.println("Olá, Leandro!");
         return cadastroRepository.save(x);
     }
 
