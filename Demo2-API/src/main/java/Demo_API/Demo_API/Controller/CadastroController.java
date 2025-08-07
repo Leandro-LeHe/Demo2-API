@@ -38,24 +38,6 @@ public class CadastroController {
     }
 
 
-    /*
-    @GetMapping("/{id}")
-    public ResponseEntity<CadastroEntity> buscarPorID(@PathVariable Long id) {
-        CadastroEntity user = cadastroService.buscarOuFalharService(id);
-        return ResponseEntity.status(HttpStatus.OK).body(user);
-    }
-    */
-
-//
-//    @PostMapping
-//    //  Conversão (biblioteca Jackson ObjectMapper)
-//    public ResponseEntity<UsuarioResponseDto> salvarCadastro(@RequestBody DtoCadastro dtocadastro) {
-//        CadastroEntity user = cadastroService.salvarService(CadastroMapper.toUsuario(dtocadastro));
-//        return ResponseEntity.status(HttpStatus.CREATED).body(CadastroMapper.toDto(user));
-//    }
-
-
-
     @PostMapping
         //  Conversão (biblioteca Jackson ObjectMapper)
     public ResponseEntity<CadastroEntity> salvarCadastro(@Valid @RequestBody CadastroEntity assistidos) {
