@@ -21,7 +21,11 @@ public class CadastroEntity implements Serializable {
 
     @NotBlank(message = "Nome não pode ser vazio")
     @Size(max = 50)
+    @Column(unique = true)
     private String nome;
+
+    @Column(unique = true)
+    private String nomeComplet;
 
    @NotBlank(message = "Email não pode ser vazio")
     @Email(message = "Email não pode ser inválido")
