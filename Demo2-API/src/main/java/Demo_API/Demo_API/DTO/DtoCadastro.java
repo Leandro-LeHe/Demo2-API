@@ -27,5 +27,13 @@ public class DtoCadastro {
     @NotBlank(message = "endereco não pode ser vazio")
     @Size(max = 50)
     private String endereco;
+
+
+
+    public DtoCadastro(String nomeTeste) {
+    }
+
+    public DtoCadastro(String nomeTeste, String mail) {
+    }
 }
 
