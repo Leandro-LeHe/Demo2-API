@@ -35,7 +35,7 @@ public class CadastroController {
             description = "EndPoint para cadastrar",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Recurso criado com sucesso!",
-                            content = @Content(mediaType = "aplication/json",
+                            content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = UsuarioResponseDto.class))),
                     @ApiResponse(responseCode = "409", description = "Usuário já cadastrado!",
                             content = @Content(mediaType = "application/json",
@@ -52,6 +52,21 @@ public class CadastroController {
         List<CadastroEntity> assistidos = cadastroService.listarService();
         return ResponseEntity.status(HttpStatus.OK).body(CadastroMapper.toListDto(assistidos));
     }
+
+
+
+    @Operation(summary = "Buscar cadastro por ID",
+            description = "EndPoint para buscar cadastro",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Cadastro encontrado!",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = UsuarioResponseDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Cadastro não encontrado!",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+            }
+    )
+
 
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponseDto> buscarPorID(@PathVariable Long id) {
