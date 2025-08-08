@@ -5,14 +5,21 @@ import Demo_API.Demo_API.DTO.Mapper.CadastroMapper;
 import Demo_API.Demo_API.DTO.UsuarioResponseDto;
 import Demo_API.Demo_API.Model.CadastroEntity;
 import Demo_API.Demo_API.Service.CadastroService;
+import Demo_API.Demo_API.Web.ErrorMessage;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.modelmapper.internal.bytebuddy.build.Plugin;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+@Tag(name = "Cadastro de assistidos", description = "Contém todos os endpoints para cadastro")
 @RestController
 @RequestMapping("/assistidos")
 public class CadastroController {
@@ -23,6 +30,21 @@ public class CadastroController {
     public CadastroController(CadastroService cadastroService) {
         this.cadastroService = cadastroService;
     }
+
+    @Operation(summary = "Cadastrar um novo assistido",
+            description = "EndPoint para cadastrar",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Recurso criado com sucesso!",
+                            content = @Content(mediaType = "aplication/json",
+                                    schema = @Schema(implementation = UsuarioResponseDto.class))),
+                    @ApiResponse(responseCode = "409", description = "Usuário já cadastrado!",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "422", description = "Dados inválidos!",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+            }
+    )
 
 
     @GetMapping
@@ -39,7 +61,7 @@ public class CadastroController {
 
 
     @PostMapping
-        //  Conversão (biblioteca Jackson ObjectMapper)
+    //  Conversão (biblioteca Jackson ObjectMapper)
     public ResponseEntity<CadastroEntity> salvarCadastro(@Valid @RequestBody CadastroEntity assistidos) {
         CadastroEntity user = cadastroService.salvarService(assistidos);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
@@ -51,6 +73,7 @@ public class CadastroController {
         cadastroService.deletarService(id);
         return ResponseEntity.noContent().build();
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<CadastroEntity> atualizarCadastro(@PathVariable Long id,
                                                             @RequestBody CadastroEntity dadosAtualizados) {

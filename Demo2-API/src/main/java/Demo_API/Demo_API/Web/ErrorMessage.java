@@ -1,8 +1,7 @@
 package Demo_API.Demo_API.Web;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.Getter;
-import lombok.ToString;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -22,7 +21,7 @@ public class ErrorMessage {
     private String statusText;
 
     private String message;
-
+    @JsonInclude(JsonInclude.Include.NON_NULL) // Se for nulo não retorna
     private Map<String, String> errors;
 
     public ErrorMessage() {
@@ -102,15 +101,15 @@ public class ErrorMessage {
         }
     }
 
-    @Override
-    public String toString() {
-        return "ErrorMessage{" +
-                "path='" + path + '\'' +
-                ", method='" + method + '\'' +
-                ", status=" + status +
-                ", statusText='" + statusText + '\'' +
-                ", message='" + message + '\'' +
-                ", errors=" + errors +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "ErrorMessage{" +
+//                "path='" + path + '\'' +
+//                ", method='" + method + '\'' +
+//                ", status=" + status +
+//                ", statusText='" + statusText + '\'' +
+//                ", message='" + message + '\'' +
+//                ", errors=" + errors +
+//                '}';
+//    }
 }
