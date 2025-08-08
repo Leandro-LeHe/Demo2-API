@@ -1,5 +1,6 @@
 package Demo_API.Demo_API.DTO;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -16,6 +17,7 @@ public class DtoCadastro {
 
     @NotBlank(message = "Nome não pode ser vazio")
     @Size(max = 50)
+    @Column(unique = true)
     private String nome;
 
     @NotBlank(message = "Email não pode ser vazio")

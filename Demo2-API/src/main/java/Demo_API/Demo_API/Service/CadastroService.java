@@ -3,7 +3,9 @@ package Demo_API.Demo_API.Service;
 
 import Demo_API.Demo_API.Model.CadastroEntity;
 import Demo_API.Demo_API.Repository.CadastroRepository;
-import jakarta.persistence.EntityNotFoundException;
+import Demo_API.Demo_API.exception.EntityNaoEncontrada;
+import Demo_API.Demo_API.exception.UsenameUniqueViolationException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,16 +23,22 @@ public class CadastroService {
     public List<CadastroEntity> listarService() {
         return cadastroRepository.findAll();
     }
-
+    @Transactional
     public CadastroEntity buscarOuFalharService(Long id) {
 
-        return cadastroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cadastro não encontrado"));
+        return cadastroRepository.findById(id).orElseThrow(
+                () -> new EntityNaoEncontrada(String.format ("ID %s não encontrado", id)));
 
     }
 
-    public CadastroEntity salvarService(CadastroEntity x) {
-        return cadastroRepository.save(x);
+    public CadastroEntity salvarService(CadastroEntity user) {
+        try {//TODO: nao esta encontrando o erro
+            return cadastroRepository.save(user);
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+            throw new UsenameUniqueViolationException(String.format("Nome %s já cadastrado!", user.getNome()));
+        }
     }
+
 
     public void deletarService(Long id) {
         cadastroRepository.deleteById(id);
@@ -47,7 +55,12 @@ public class CadastroService {
         existente.setEmail(dadosAtualizados.getEmail());
         existente.setEndereco(dadosAtualizados.getEndereco());
 
-        return cadastroRepository.save(existente);
-    }
+        try {        //TODO: noa esta pegando o erro
 
+            return cadastroRepository.save(existente);
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+            throw new UsenameUniqueViolationException(String.format("Nome %s já cadastrado!", existente.getNome()));
+        }
+
+    }
 }
