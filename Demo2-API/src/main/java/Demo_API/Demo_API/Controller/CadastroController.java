@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.modelmapper.internal.bytebuddy.build.Plugin;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,15 +30,22 @@ public class CadastroController {
         this.cadastroService = cadastroService;
     }
 
-
-
-
+    @Operation(summary = "Listar cadastros",
+            description = "EndPoint para listar cadastro",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Cadastros listados!",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = UsuarioResponseDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Nenhum cadastro!",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+            }
+    )
     @GetMapping
     public ResponseEntity<List<UsuarioResponseDto>> listarCadastros() {
         List<CadastroEntity> assistidos = cadastroService.listarService();
         return ResponseEntity.status(HttpStatus.OK).body(CadastroMapper.toListDto(assistidos));
     }
-
 
 
     @Operation(summary = "Buscar cadastro por ID",
@@ -53,7 +59,6 @@ public class CadastroController {
                                     schema = @Schema(implementation = ErrorMessage.class))),
             }
     )
-
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponseDto> buscarPorID(@PathVariable Long id) {
         CadastroEntity user = cadastroService.buscarOuFalharService(id);
@@ -82,6 +87,18 @@ public class CadastroController {
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
+
+    @Operation(summary = "Deletar cadastro",
+            description = "EndPoint para deletar cadastro",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Cadastro excluído!",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = Void.class))),
+                    @ApiResponse(responseCode = "404", description = "Cadastro não encontrado!",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+            }
+    )
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarCadastro(@PathVariable Long id) {
