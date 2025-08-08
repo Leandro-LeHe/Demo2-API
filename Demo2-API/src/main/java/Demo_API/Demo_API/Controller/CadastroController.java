@@ -31,20 +31,7 @@ public class CadastroController {
         this.cadastroService = cadastroService;
     }
 
-    @Operation(summary = "Cadastrar um novo assistido",
-            description = "EndPoint para cadastrar",
-            responses = {
-                    @ApiResponse(responseCode = "201", description = "Recurso criado com sucesso!",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = UsuarioResponseDto.class))),
-                    @ApiResponse(responseCode = "409", description = "Usuário já cadastrado!",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "422", description = "Dados inválidos!",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class))),
-            }
-    )
+
 
 
     @GetMapping
@@ -67,7 +54,6 @@ public class CadastroController {
             }
     )
 
-
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponseDto> buscarPorID(@PathVariable Long id) {
         CadastroEntity user = cadastroService.buscarOuFalharService(id);
@@ -75,6 +61,20 @@ public class CadastroController {
     }
 
 
+    @Operation(summary = "Cadastrar",
+            description = "EndPoint para cadastrar",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Recurso criado com sucesso!",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = UsuarioResponseDto.class))),
+                    @ApiResponse(responseCode = "409", description = "Usuário já cadastrado!",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "422", description = "Dados inválidos!",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+            }
+    )
     @PostMapping
     //  Conversão (biblioteca Jackson ObjectMapper)
     public ResponseEntity<CadastroEntity> salvarCadastro(@Valid @RequestBody CadastroEntity assistidos) {
@@ -89,6 +89,18 @@ public class CadastroController {
         return ResponseEntity.noContent().build();
     }
 
+
+    @Operation(summary = "Atualizar cadastro",
+            description = "EndPoint para atualizar cadastro",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Cadastro atualizado!",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = Void.class))),
+                    @ApiResponse(responseCode = "404", description = "Cadastro não encontrado!",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+            }
+    )
     @PutMapping("/{id}")
     public ResponseEntity<CadastroEntity> atualizarCadastro(@PathVariable Long id,
                                                             @RequestBody CadastroEntity dadosAtualizados) {
