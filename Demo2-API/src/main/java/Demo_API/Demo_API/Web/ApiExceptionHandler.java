@@ -45,9 +45,6 @@ public class ApiExceptionHandler {
     public ResponseEntity<ErrorMessage> MethodArgumentNotValidException(HttpServletRequest request,
                                                                         BindingResult result) {
 
-        //TODO:log.error("api error: ", ex); APRESENTANDO ERRO
-        //TODO: não esta retornando o campo ERROR
-
 
         return ResponseEntity
                 .status(HttpStatus.UNPROCESSABLE_ENTITY)

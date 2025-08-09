@@ -74,13 +74,4 @@ public class CadastroEntity implements Serializable {
         this.endereco = endereco;
     }
 
-//    @Override
-//    public String toString() {
-//        return "CadastroEntity{" +
-//                "id=" + id +
-//                ", nome='" + nome + '\'' +
-//                ", email='" + email + '\'' +
-//                ", endereco='" + endereco + '\'' +
-//                '}';
-//    }
 }
