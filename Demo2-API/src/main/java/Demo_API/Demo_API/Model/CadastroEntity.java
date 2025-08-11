@@ -24,9 +24,6 @@ public class CadastroEntity implements Serializable {
     @Column(unique = true)
     private String nome;
 
-    @Column(unique = true)
-    private String nomeComplet;
-
    @NotBlank(message = "Email não pode ser vazio")
     @Email(message = "Email não pode ser inválido")
     @Size(max = 50)
@@ -44,6 +41,9 @@ public class CadastroEntity implements Serializable {
         this.nome = nome;
         this.email = email;
         this.endereco = endereco;
+    }
+
+    public CadastroEntity(String nomeTeste, String mail) {
     }
 
     public Long getId() {

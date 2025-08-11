@@ -28,11 +28,5 @@ public class UsuarioResponseDto {
         this.nome = nome;
     }
 
-    @Override
-    public String toString() {
-        return "UsuarioResponseDto{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                '}';
-    }
+
 }

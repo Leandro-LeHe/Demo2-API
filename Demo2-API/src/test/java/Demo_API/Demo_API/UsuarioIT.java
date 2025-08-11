@@ -2,6 +2,7 @@ package Demo_API.Demo_API;
 
 import Demo_API.Demo_API.DTO.DtoCadastro;
 import Demo_API.Demo_API.DTO.UsuarioResponseDto;
+import Demo_API.Demo_API.Model.CadastroEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,11 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(scripts = "/sql/usuarios/usuarios-insert.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = "/sql/usuarios/usuarios-delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = {
+        "classpath:/sql/schema.sql",
+        "classpath:/sql/usuarios-insert.sql"
+}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "classpath:/sql/usuarios-delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 
 public class UsuarioIT {
 
@@ -25,7 +29,7 @@ public class UsuarioIT {
                 .post()
                 .uri("/assistidos")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new DtoCadastro("nomeTeste","Teste@gmail.com"))
+                .bodyValue(new CadastroEntity(null, "Joao", "joao@email.com", "Rua 123"))
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody(UsuarioResponseDto.class)
@@ -34,6 +38,6 @@ public class UsuarioIT {
 
         org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull(); // testar se o retorno não é nulo
         org.assertj.core.api.Assertions.assertThat(responseBody.getId()).isNotNull();
-        org.assertj.core.api.Assertions.assertThat(responseBody.getNome()).isEqualTo("nomeTeste");
+        org.assertj.core.api.Assertions.assertThat(responseBody.getNome()).isEqualTo("Joao");
     }
 }
