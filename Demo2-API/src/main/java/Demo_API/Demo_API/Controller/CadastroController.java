@@ -48,6 +48,10 @@ public class CadastroController {
     }
 
 
+
+
+
+
     @Operation(summary = "Buscar cadastro por ID",
             description = "EndPoint para buscar cadastro",
             responses = {
@@ -80,12 +84,20 @@ public class CadastroController {
                                     schema = @Schema(implementation = ErrorMessage.class))),
             }
     )
+
+
+
+
+
     @PostMapping
     //  Conversão (biblioteca Jackson ObjectMapper)
     public ResponseEntity<CadastroEntity> salvarCadastro(@Valid @RequestBody CadastroEntity assistidos) {
         CadastroEntity user = cadastroService.salvarService(assistidos);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
+
+
+
 
 
     @Operation(summary = "Deletar cadastro",
@@ -118,6 +130,11 @@ public class CadastroController {
                                     schema = @Schema(implementation = ErrorMessage.class))),
             }
     )
+
+
+
+
+
     @PutMapping("/{id}")
     public ResponseEntity<CadastroEntity> atualizarCadastro(@PathVariable Long id,
                                                             @RequestBody CadastroEntity dadosAtualizados) {
