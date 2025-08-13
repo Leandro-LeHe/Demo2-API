@@ -27,7 +27,7 @@ public class UsuarioIT {
                 .post()
                 .uri("/assistidos")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new CadastroEntity(null, "nomeTeste", "Teste@gmail.com", "Cidade X"))
+                .bodyValue(new CadastroEntity(null, "nomeTeste", "123", "Teste@gmail.com", "Cidade X"))
 
                 .exchange()
                 .expectStatus().isCreated()

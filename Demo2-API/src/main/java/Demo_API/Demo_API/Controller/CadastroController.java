@@ -91,9 +91,9 @@ public class CadastroController {
 
     @PostMapping
     //  Conversão (biblioteca Jackson ObjectMapper)
-    public ResponseEntity<CadastroEntity> salvarCadastro(@Valid @RequestBody CadastroEntity assistidos) {
-        CadastroEntity user = cadastroService.salvarService(assistidos);
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    public ResponseEntity<UsuarioResponseDto> salvarCadastro(@Valid @RequestBody DtoCadastro createDto) {
+        CadastroEntity user = cadastroService.salvarService(CadastroMapper.toUsuario(createDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(CadastroMapper.toDto(user));
     }
 
 
@@ -140,6 +140,13 @@ public class CadastroController {
                                                             @RequestBody CadastroEntity dadosAtualizados) {
         CadastroEntity cadastroAtualizado = cadastroService.atualizarService(id, dadosAtualizados);
         return ResponseEntity.ok(cadastroAtualizado);
+    }
+
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UsuarioResponseDto> alterarSenha(@PathVariable Long id, @RequestBody CadastroEntity dadosAlterado) {
+        CadastroEntity user = cadastroService.editarSenha(id, dadosAlterado.getSenha());
+        return ResponseEntity.ok(CadastroMapper.toDto(user));
     }
 
 }

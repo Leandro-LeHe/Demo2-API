@@ -34,7 +34,7 @@ public class CadastroService {
     public CadastroEntity salvarService(CadastroEntity user) {
         try {//TODO: nao esta encontrando o erro
             return cadastroRepository.save(user);
-        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+        }   catch (org.springframework.dao.DataIntegrityViolationException ex) {
             throw new UsenameUniqueViolationException(String.format("Nome %s já cadastrado!", user.getNome()));
         }
     }
@@ -55,12 +55,18 @@ public class CadastroService {
         existente.setEmail(dadosAtualizados.getEmail());
         existente.setEndereco(dadosAtualizados.getEndereco());
 
-        try {        //TODO: noa esta pegando o erro
+        try {   //TODO: noa esta pegando o erro
 
             return cadastroRepository.save(existente);
         } catch (org.springframework.dao.DataIntegrityViolationException ex) {
             throw new UsenameUniqueViolationException(String.format("Nome %s já cadastrado!", existente.getNome()));
         }
 
+    }
+    @Transactional
+    public CadastroEntity editarSenha(Long id, String senha) {
+        CadastroEntity user = buscarOuFalharService(id);
+        user.setSenha(senha);
+        return user;
     }
 }
