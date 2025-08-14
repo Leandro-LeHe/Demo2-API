@@ -12,17 +12,17 @@ import java.io.Serializable;
 
 
 @Entity //indica que é uma entidade
-@Table(name="Tabela-Assistidos")  // nome da tabela
+@Table(name="Tabela-Assistidos")  // username da tabela
 
 public class CadastroEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Nome não pode ser vazio")
+    @NotBlank(message = "username não pode ser vazio")
     @Size(max = 50)
     @Column(unique = true)
-    private String nome;
+    private String username;
 
 
     //@Column(unique = true)
@@ -40,7 +40,7 @@ public class CadastroEntity implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(unique = true, nullable = false)
-    private Role role = Role.ROLE_USER;
+    private Role role;
 
     public Resource getRole() {
             return null;
@@ -67,7 +67,7 @@ public class CadastroEntity implements Serializable {
     public String toString() {
         return "CadastroEntity{" +
                 "id=" + id +
-                ", nome='" + nome + '\'' +
+                ", username='" + username + '\'' +
                 ", senha='" + senha + '\'' +
                 ", email='" + email + '\'' +
                 ", endereco='" + endereco + '\'' +
@@ -78,11 +78,13 @@ public class CadastroEntity implements Serializable {
 
 
     public CadastroEntity() {
+        this.role = Role.ROLE_USER;
     }
 
-    public CadastroEntity(Long id, String nome, String senha, String email, String endereco) {
+
+    public CadastroEntity(Long id, String username, String senha, String email, String endereco) {
         this.id = id;
-        this.nome = nome;
+        this.username = username;
         this.senha = senha;
         this.email = email;
         this.endereco = endereco;
@@ -93,12 +95,12 @@ public class CadastroEntity implements Serializable {
         return id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getusername() {
+        return username;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setusername(String username) {
+        this.username = username;
     }
 
     public String getSenha() {

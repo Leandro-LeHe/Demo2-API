@@ -3,6 +3,7 @@ package Demo_API.Demo_API.Controller;
 import Demo_API.Demo_API.DTO.DtoCadastro;
 import Demo_API.Demo_API.DTO.Mapper.CadastroMapper;
 import Demo_API.Demo_API.DTO.UsuarioResponseDto;
+import Demo_API.Demo_API.DTO.UsuarioSenhaDto;
 import Demo_API.Demo_API.Model.CadastroEntity;
 import Demo_API.Demo_API.Service.CadastroService;
 import Demo_API.Demo_API.Web.ErrorMessage;
@@ -47,11 +48,6 @@ public class CadastroController {
         return ResponseEntity.status(HttpStatus.OK).body(CadastroMapper.toListDto(assistidos));
     }
 
-
-
-
-
-
     @Operation(summary = "Buscar cadastro por ID",
             description = "EndPoint para buscar cadastro",
             responses = {
@@ -68,7 +64,6 @@ public class CadastroController {
         CadastroEntity user = cadastroService.buscarOuFalharService(id);
         return ResponseEntity.ok(CadastroMapper.toDto(user));
     }
-
 
     @Operation(summary = "Cadastrar",
             description = "EndPoint para cadastrar",
@@ -92,13 +87,9 @@ public class CadastroController {
     @PostMapping
     //  Conversão (biblioteca Jackson ObjectMapper)
     public ResponseEntity<UsuarioResponseDto> salvarCadastro(@Valid @RequestBody DtoCadastro createDto) {
-        CadastroEntity user = cadastroService.salvarService(CadastroMapper.toUsuario(createDto));
+        CadastroEntity user = cadastroService.salvar(CadastroMapper.toUsuario(createDto));
         return ResponseEntity.status(HttpStatus.CREATED).body(CadastroMapper.toDto(user));
     }
-
-
-
-
 
     @Operation(summary = "Deletar cadastro",
             description = "EndPoint para deletar cadastro",
@@ -117,7 +108,6 @@ public class CadastroController {
         cadastroService.deletarService(id);
         return ResponseEntity.noContent().build();
     }
-
 
     @Operation(summary = "Atualizar cadastro",
             description = "EndPoint para atualizar cadastro",
@@ -143,10 +133,21 @@ public class CadastroController {
     }
 
 
+    @Operation(summary = "Atualizar senha", description = "Atualizar senha",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Senha atualizada com sucesso",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))),
+                    @ApiResponse(responseCode = "400", description = "Senha não confere",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "404", description = "Recurso não encontrado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "422", description = "Campos invalidos ou mal formatados",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
+            })
     @PatchMapping("/{id}")
-    public ResponseEntity<UsuarioResponseDto> alterarSenha(@PathVariable Long id, @RequestBody CadastroEntity dadosAlterado) {
-        CadastroEntity user = cadastroService.editarSenha(id, dadosAlterado.getSenha());
-        return ResponseEntity.ok(CadastroMapper.toDto(user));
+    public ResponseEntity<Void> updatePassword(@PathVariable Long id, @Valid @RequestBody UsuarioSenhaDto dto) {
+        CadastroEntity user = cadastroService.editarSenha(id, dto.getSenhaAtual(), dto.getNovaSenha(), dto.getConfirmaSenha());
+        return ResponseEntity.noContent().build();
     }
 
 }
