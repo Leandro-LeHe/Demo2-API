@@ -8,6 +8,7 @@ import Demo_API.Demo_API.Model.CadastroEntity;
 import Demo_API.Demo_API.Service.CadastroService;
 import Demo_API.Demo_API.Web.ErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,21 +33,17 @@ public class CadastroController {
         this.cadastroService = cadastroService;
     }
 
-    @Operation(summary = "Listar cadastros",
-            description = "EndPoint para listar cadastro",
+    @Operation(summary = "Listar todos os usuários", description = "Listar todos os usuários cadastrados",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Cadastros listados!",
+                    @ApiResponse(responseCode = "200", description = "Lista com todos os usuários cadastrados",
                             content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = UsuarioResponseDto.class))),
-                    @ApiResponse(responseCode = "404", description = "Nenhum cadastro!",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class))),
-            }
-    )
+                                    array = @ArraySchema(schema = @Schema(implementation = UsuarioResponseDto.class))))
+            })
     @GetMapping
-    public ResponseEntity<List<UsuarioResponseDto>> listarCadastros() {
-        List<CadastroEntity> assistidos = cadastroService.listarService();
-        return ResponseEntity.status(HttpStatus.OK).body(CadastroMapper.toListDto(assistidos));
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<List<UsuarioResponseDto>> listarTodos() {
+        List<CadastroEntity> users = cadastroService.listarService();
+        return ResponseEntity.ok(CadastroMapper.toListDto(users));
     }
 
     @Operation(summary = "Buscar cadastro por ID",
@@ -60,10 +58,12 @@ public class CadastroController {
             }
     )
     @GetMapping("/{id}")
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN') OR hasAnyRole('ROLE_USER')")
     public ResponseEntity<UsuarioResponseDto> buscarPorID(@PathVariable Long id) {
         CadastroEntity user = cadastroService.buscarOuFalharService(id);
         return ResponseEntity.ok(CadastroMapper.toDto(user));
     }
+
 
     @Operation(summary = "Cadastrar",
             description = "EndPoint para cadastrar",
@@ -86,9 +86,10 @@ public class CadastroController {
 
     @PostMapping
     //  Conversão (biblioteca Jackson ObjectMapper)
+   @PreAuthorize ("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<UsuarioResponseDto> salvarCadastro(@Valid @RequestBody DtoCadastro createDto) {
-        CadastroEntity user = cadastroService.salvar(CadastroMapper.toUsuario(createDto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(CadastroMapper.toDto(user));
+            CadastroEntity user = cadastroService.salvar(CadastroMapper.toUsuario(createDto));
+            return ResponseEntity.status(HttpStatus.CREATED).body(CadastroMapper.toDto(user));
     }
 
     @Operation(summary = "Deletar cadastro",
@@ -104,6 +105,7 @@ public class CadastroController {
     )
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_USER') AND (#id == authentication.principal.id)")
     public ResponseEntity<Void> deletarCadastro(@PathVariable Long id) {
         cadastroService.deletarService(id);
         return ResponseEntity.noContent().build();
@@ -126,6 +128,7 @@ public class CadastroController {
 
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN') OR hasAnyRole('ROLE_USER')")
     public ResponseEntity<CadastroEntity> atualizarCadastro(@PathVariable Long id,
                                                             @RequestBody CadastroEntity dadosAtualizados) {
         CadastroEntity cadastroAtualizado = cadastroService.atualizarService(id, dadosAtualizados);
@@ -145,6 +148,7 @@ public class CadastroController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN') OR hasAnyRole('ROLE_USER')")
     public ResponseEntity<Void> updatePassword(@PathVariable Long id, @Valid @RequestBody UsuarioSenhaDto dto) {
         CadastroEntity user = cadastroService.editarSenha(id, dto.getSenhaAtual(), dto.getNovaSenha(), dto.getConfirmaSenha());
         return ResponseEntity.noContent().build();

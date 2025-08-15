@@ -12,10 +12,10 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class DtoCadastro {
 
-    @NotBlank(message = "Nome não pode ser vazio")
+    @NotBlank(message = "username não pode ser vazio")
     @Size(max = 50)
     @Column(unique = true)
-    private String nome;
+    private String username;
 
     private String senha;
 
@@ -27,12 +27,12 @@ public class DtoCadastro {
     private String endereco;
 
 
-    public String getNome() {
-        return nome;
+    public String getusername() {
+        return username;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setusername(String username) {
+        this.username = username;
     }
 
     public String getSenha() {

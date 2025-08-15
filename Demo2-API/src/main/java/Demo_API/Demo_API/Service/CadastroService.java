@@ -36,7 +36,6 @@ public class CadastroService {
     }
 
 
-
     public CadastroService(CadastroRepository cadastroRepository, PasswordEncoder passwordEncoder) {
         this.cadastroRepository = cadastroRepository;
 
@@ -66,7 +65,8 @@ public class CadastroService {
 
 
     public void deletarService(Long id) {
-        cadastroRepository.deleteById(id);
+        CadastroEntity existente = buscarOuFalharService(id);
+        cadastroRepository.delete(existente);
     }
 
 
@@ -104,7 +104,7 @@ public class CadastroService {
         return user;
     }
 
-    @Transactional
+
     public CadastroEntity buscarPorUsername(String username) {
         return cadastroRepository.findByUsername(username).orElseThrow(
                 () -> new EntityNaoEncontrada(String.format("Usuario com %s não encontrado", username)));

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/assistidos")
+//@RequestMapping("/assistidos")
 public class AutenticacaoController {
 
     private final JwtUserDetailsService detailsService;
@@ -35,16 +35,16 @@ public class AutenticacaoController {
                                         HttpServletRequest request) {
         try {
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(dto.getNome(), dto.getPassword());
+                    new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword());
 
             authenticationManager.authenticate(authenticationToken);
 
-            JwtToken token = detailsService.getTokenAuthenticated(dto.getNome());
+            JwtToken token = detailsService.getTokenAuthenticated(dto.getUsername());
 
             return ResponseEntity.ok(token);
 
         } catch (AuthenticationException ex) {
-            // Aqui você pode registrar log se quiser
+            // você pode registrar log
         }
 
         return ResponseEntity

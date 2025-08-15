@@ -37,6 +37,6 @@ public class UsuarioIT {
 
         org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull(); // testar se o retorno não é nulo
         org.assertj.core.api.Assertions.assertThat(responseBody.getId()).isNotNull();
-        org.assertj.core.api.Assertions.assertThat(responseBody.getNome()).isEqualTo("nomeTeste");
+        org.assertj.core.api.Assertions.assertThat(responseBody.getusername()).isEqualTo("nomeTeste");
     }
 }
