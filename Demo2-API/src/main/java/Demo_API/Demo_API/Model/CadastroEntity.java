@@ -1,6 +1,5 @@
 package Demo_API.Demo_API.Model;
 
-//ENTIDADE DO BANCO DE DADOS
 //notação JPA
 
 import jakarta.persistence.*;
@@ -11,23 +10,19 @@ import java.io.Serializable;
 
 
 @Entity //indica que é uma entidade
-@Table(name="Tabela-Assistidos")  // nome da tabela
-
+@Table(name="Tabela-Assistidos")  // username da tabela
 public class CadastroEntity implements Serializable {
-    //TODO:  @JsonIgnore  @JsonIgnoreProperties(ignoreUnknown = true) por que não usar?
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Nome não pode ser vazio")
+    @NotBlank(message = "username não pode ser vazio")
     @Size(max = 50)
-    @Column(unique = true)
-    private String nome;
+    private String username;
 
-    @Column(unique = true)
-    private String nomeComplet;
+    private String senha;
 
-   @NotBlank(message = "Email não pode ser vazio")
+    @NotBlank(message = "Email não pode ser vazio")
     @Email(message = "Email não pode ser inválido")
     @Size(max = 50)
     private String email;
@@ -36,26 +31,71 @@ public class CadastroEntity implements Serializable {
     @Size(max = 50)
     private String endereco;
 
-    public CadastroEntity() {
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", unique = true, nullable = false)
+    private Role role;
+
+    public enum Role {
+        ROLE_ADMIN, ROLE_USER
     }
 
-    public CadastroEntity(Long id, String nome, String email, String endereco) {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true; // mesma referência
+        if (o == null || getClass() != o.getClass()) return false; // tipos diferentes
+        CadastroEntity that = (CadastroEntity) o;
+        return id != null && id.equals(that.id); // compara pelo id
+    }
+
+    @Override
+    public int hashCode() {
+        return 31; // valor fixo enquanto id é null (evita problemas no Hibernate)
+    }
+
+    @Override
+    public String toString() {
+        return "CadastroEntity{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", senha='" + senha + '\'' +
+                ", email='" + email + '\'' +
+                ", endereco='" + endereco + '\'' +
+                '}';
+    }
+
+    public CadastroEntity() {
+        this.role = Role.ROLE_USER;
+    }
+
+
+    public CadastroEntity(Long id, String username, String senha, String email, String endereco) {
         this.id = id;
-        this.nome = nome;
+        this.username = username;
+        this.senha = senha;
         this.email = email;
         this.endereco = endereco;
     }
+
 
     public Long getId() {
         return id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getusername() {
+        return username;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setusername(String username) {
+        this.username = username;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public String getEmail() {
@@ -74,13 +114,23 @@ public class CadastroEntity implements Serializable {
         this.endereco = endereco;
     }
 
-//    @Override
-//    public String toString() {
-//        return "CadastroEntity{" +
-//                "id=" + id +
-//                ", nome='" + nome + '\'' +
-//                ", email='" + email + '\'' +
-//                ", endereco='" + endereco + '\'' +
-//                '}';
-//    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 }

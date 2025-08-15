@@ -2,14 +2,16 @@ package Demo_API.Demo_API.DTO;
 
 public class UsuarioResponseDto {
     private Long id;
-    private String nome;
+    private String username;
+    private String role;
 
     public UsuarioResponseDto() {
     }
 
-    public UsuarioResponseDto(Long id, String nome) {
+    public UsuarioResponseDto(Long id, String username, String role) {
         this.id = id;
-        this.nome = nome;
+        this.username = username;
+        this.role = role;
     }
 
     public Long getId() {
@@ -20,19 +22,28 @@ public class UsuarioResponseDto {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getusername() {
+        return username;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setusername(String username) {
+        this.username = username;
     }
+
+    public String getRole(){
+        return role;
+    }
+    public void setRole(String role){
+        this.role = role;
+    }
+
 
     @Override
     public String toString() {
         return "UsuarioResponseDto{" +
                 "id=" + id +
-                ", nome='" + nome + '\'' +
+                ", username='" + username + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
 }

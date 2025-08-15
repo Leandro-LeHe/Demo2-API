@@ -7,25 +7,57 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import org.hibernate.validator.constraints.Email;
 
-@Getter
-@Setter
-@NoArgsConstructor // obrigatório para ModelMapper funcionar
+@NoArgsConstructor // obrigatório para o Jackson e ModelMapper
 @AllArgsConstructor
 public class DtoCadastro {
 
-    @NotBlank(message = "Nome não pode ser vazio")
+    @NotBlank(message = "username não pode ser vazio")
     @Size(max = 50)
     @Column(unique = true)
-    private String nome;
+    private String username;
+
+    private String senha;
 
     @NotBlank(message = "Email não pode ser vazio")
-    @Email(message = "Email não pode ser inválido")
     private String email;
 
-    @NotBlank(message = "endereco não pode ser vazio")
+    @NotBlank(message = "Endereço não pode ser vazio")
     @Size(max = 50)
     private String endereco;
-}
 
+
+    public String getusername() {
+        return username;
+    }
+
+    public void setusername(String username) {
+        this.username = username;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
+
+}

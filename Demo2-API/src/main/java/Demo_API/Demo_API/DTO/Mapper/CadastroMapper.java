@@ -4,26 +4,42 @@ import Demo_API.Demo_API.DTO.DtoCadastro;
 import Demo_API.Demo_API.DTO.UsuarioResponseDto;
 import Demo_API.Demo_API.Model.CadastroEntity;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CadastroMapper {
-    // DTO para entity
-    public static CadastroEntity toUsuario(DtoCadastro dtoCadastro) {
-        return new ModelMapper().map(dtoCadastro, CadastroEntity.class);
 
+    // Reutiliza uma única instância do ModelMapper
+    private static final ModelMapper mapper = new ModelMapper();
+
+    // DTO → Entity
+    public static CadastroEntity toUsuario(DtoCadastro createDto) {
+        return mapper.map(createDto, CadastroEntity.class);
     }
-    //Entity to DTO
+
     public static UsuarioResponseDto toDto(CadastroEntity assistido) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(assistido, UsuarioResponseDto.class);
+        final String role = (assistido.getRole() != null)
+                ? assistido.getRole().name().substring("ROLE_".length())
+                : "USER";
 
+        PropertyMap<CadastroEntity, UsuarioResponseDto> props = new PropertyMap<CadastroEntity, UsuarioResponseDto>() {
+            @Override
+            protected void configure() {
+                map().setRole(role);
+            }
+        };
+
+        ModelMapper mapper = new ModelMapper();
+        mapper.addMappings(props);
+        return mapper.map(assistido, UsuarioResponseDto.class);
     }
 
+    // Lista de Entity → Lista de DTO
     public static List<UsuarioResponseDto> toListDto(List<CadastroEntity> cadastros) {
-        return cadastros.stream().map(user -> toDto(user)).collect(Collectors.toList());
-
+        return cadastros.stream()
+                .map(CadastroMapper::toDto)
+                .collect(Collectors.toList());
     }
-
 }
