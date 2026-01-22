@@ -13,17 +13,18 @@ import lombok.AllArgsConstructor;
 public class DtoCadastro {
 
     @NotBlank(message = "username não pode ser vazio")
-    @Size(max = 50)
+    @Size(min=3, max = 50)
     @Column(unique = true)
     private String username;
-
+@NotBlank(message = "senha onrigatória")
     private String senha;
 
+    @Size(min=3, max = 50)
     @NotBlank(message = "Email não pode ser vazio")
     private String email;
 
     @NotBlank(message = "Endereço não pode ser vazio")
-    @Size(max = 50)
+    @Size(min=3, max = 50)
     private String endereco;
 
 
@@ -58,6 +59,5 @@ public class DtoCadastro {
     public void setEndereco(String endereco) {
         this.endereco = endereco;
     }
-
 
 }

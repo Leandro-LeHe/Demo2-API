@@ -40,8 +40,7 @@ public class UsuarioResponseDto {
 
     @Override
     public String toString() {
-        return "UsuarioResponseDto{" +
-                "id=" + id +
+        return "UsuarioResponseDto{" + "id=" + id +
                 ", username='" + username + '\'' +
                 ", role='" + role + '\'' +
                 '}';

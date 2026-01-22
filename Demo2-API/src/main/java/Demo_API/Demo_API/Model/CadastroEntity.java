@@ -16,7 +16,7 @@ public class CadastroEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "username não pode ser vazio")
+    @NotBlank(message = "nome não pode ser vazio")
     @Size(max = 50)
     private String username;
 
@@ -27,7 +27,7 @@ public class CadastroEntity implements Serializable {
     @Size(max = 50)
     private String email;
 
-    @NotBlank(message = "endereco não pode ser vazio")
+    @NotBlank(message = "Endereco não pode ser vazio")
     @Size(max = 50)
     private String endereco;
 
@@ -118,13 +118,6 @@ public class CadastroEntity implements Serializable {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public Role getRole() {
         return role;
