@@ -23,7 +23,7 @@ import java.util.List;
 
 @Tag(name = "Cadastro de assistidos", description = "Contém todos os endpoints para cadastro")
 @RestController
-@RequestMapping("/assistidos")
+@RequestMapping("/api/v1/assistidos")
 public class CadastroController {
 
     private final CadastroService cadastroService;
@@ -40,7 +40,7 @@ public class CadastroController {
                                     array = @ArraySchema(schema = @Schema(implementation = UsuarioResponseDto.class))))
             })
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    // @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<List<UsuarioResponseDto>> listarTodos() {
         List<CadastroEntity> users = cadastroService.listarService();
         return ResponseEntity.ok(CadastroMapper.toListDto(users));
@@ -86,7 +86,7 @@ public class CadastroController {
 
     @PostMapping
     //  Conversão (biblioteca Jackson ObjectMapper)
-   @PreAuthorize ("hasAnyRole('ROLE_ADMIN')")
+   //@PreAuthorize ("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<UsuarioResponseDto> salvarCadastro(@Valid @RequestBody DtoCadastro createDto) {
             CadastroEntity user = cadastroService.salvar(CadastroMapper.toUsuario(createDto));
             return ResponseEntity.status(HttpStatus.CREATED).body(CadastroMapper.toDto(user));

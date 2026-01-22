@@ -31,7 +31,9 @@ public class SpringSecurityConfig {
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("assistidos/*").authenticated()
+                        .requestMatchers("/api/v1/assistidos/**").authenticated()
+                        .requestMatchers("/docs-assistidos/**").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "auth").permitAll()
                         .anyRequest().authenticated()
                 )
